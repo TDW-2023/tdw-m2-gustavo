@@ -1,14 +1,14 @@
 import "./App.css";
 import TodoForm from "./components/TodoForm";
-import { TODOFUNCTIONS } from "./constants";
 import React, { useState, useEffect } from "react";
 import Todo from "./components/Todo";
 import TodoListFilter from "./components/TodoListFilter";
 import TodoSearch from "./components/TodoSearch";
+import Cookies from "js-cookie";
 
 function App() {
   // Define um estado 'allTodo' que representa a lista de tarefas e a função 'setTodo' para atualizá-lo.
-  const [allTodo, setTodo] = useState(TODOFUNCTIONS);
+  const [allTodo, setTodo] = useState([]);
   // Define um estado 'errorRepeatedText' para armazenar mensagens de erro relacionadas a tarefas duplicadas.
   const [errorRepeatedText, setErrorRepeatedText] = useState("");
   // Define um estado local 'allSelected' para controlar se todas as tarefas estão selecionadas
@@ -17,10 +17,64 @@ function App() {
   const [filter, setFilter] = useState("AllTasks");
   // Adiciona o estado 'filteredTodo'
   const [filteredTodo, setFilteredTodo] = useState([]);
-
+  // Define um estado 'searchTerm' para controlar o termo de pesquisa na barra de busca
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Define um efeito colateral que será executado sempre que 'filter' for alterado
+  // Efeito que executa no montamento inicial para recuperar os dados do cookie
+  useEffect(() => {
+    // Define uma função assíncrona chamada fetchData que recupera os dados do cookie
+    const fetchData = async () => {
+      try {
+        // Recupera o valor do cookie com o nome "todoData"
+        const todoDataFromCookie = await Cookies.get("todoData");
+        // Imprime o valor do cookie no console para fins de depuração
+        console.log("Todo data from cookie:", todoDataFromCookie);
+
+        // Verifica se o valor do cookie não é indefinido
+        if (todoDataFromCookie !== undefined) {
+          // Converte os dados do cookie para um array
+          const todoDataArray = JSON.parse(todoDataFromCookie);
+
+          // Filtra itens duplicados antes de atualizar o estado
+          const uniqueTodoData = todoDataArray.filter((item) =>
+            // Verifica se cada item do estado anterior não tem o mesmo ID do item atual
+            allTodo.every((existingItem) => existingItem.id !== item.id)
+          );
+
+          // Imprime os dados filtrados no console para fins de depuração
+          console.log("Parsed todo data:", uniqueTodoData);
+
+          // Atualiza o estado apenas se houver novos dados a serem adicionados
+          if (uniqueTodoData.length > 0) {
+            setTodo((prevTodo) => prevTodo.concat(uniqueTodoData));
+          }
+        } else {
+          // Define o estado como um array vazio se não houver dados no cookie
+          setTodo([]);
+          // Imprime uma mensagem no console indicando que o estado foi definido como um array vazio
+          console.log("Setting todo data to an empty array");
+        }
+      } catch (error) {
+        // Trata qualquer erro que possa ocorrer durante a recuperação dos dados do cookie
+        console.error("Error fetching data from cookie:", error);
+      }
+    };
+    
+    // Chama a função fetchData para executar o efeito
+    fetchData();
+  }, [allTodo]); // Adiciona 'allTodo' à lista de dependências
+
+  // Efeito que executa sempre que 'allTodo' for alterado
+  useEffect(() => {
+    // Converte o array allTodo em uma string JSON
+    const allTodoString = JSON.stringify(
+      [...new Set(allTodo.map(JSON.stringify))].map(JSON.parse)
+    );
+    // Armazena a string JSON no cookie com o nome "todoData"
+    Cookies.set("todoData", allTodoString);
+  }, [allTodo]);
+
+  // Efeito que executa sempre que 'filter' ou 'allTodo' for alterado
   useEffect(() => {
     // Define a função de filtro com base no estado 'filter'
     const getFilteredTodo = () => {
@@ -41,11 +95,12 @@ function App() {
     setFilteredTodo(getFilteredTodo());
   }, [filter, allTodo]); // Dependências do efeito colateral
 
-  // UseEffect é utilizado para realizar a filtragem das tarefas com base nas alterações em 'allTodo' e 'searchTerm'
+  // Efeito que executa sempre que 'allTodo' ou 'searchTerm' for alterado
   useEffect(() => {
     // Filtra os dados da lista ('allTodo') com base no termo de pesquisa ('searchTerm')
-    const filteredData = allTodo.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredData = allTodo.filter(
+      (item) =>
+        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     // Atualiza o estado 'filteredTodo' com os dados filtrados
     setFilteredTodo(filteredData);
@@ -117,10 +172,8 @@ function App() {
             {headingText}
           </h2>
         </div>
-        {/* Passa setTodo como propriedade para o componente Todo */}
-
+        {/* Renderiza o componente TodoSearch e passa as propriedades 'searchTerm' e 'setSearchTerm' */}
         <TodoSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
         <Todo
           allTodo={filteredTodo}
           setTodo={setTodo}

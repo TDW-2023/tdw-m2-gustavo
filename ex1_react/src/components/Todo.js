@@ -1,5 +1,5 @@
 // Importa o React e a função 'useState' do pacote 'react'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Define o componente funcional 'Todo', que recebe várias propriedades desestruturadas como argumentos
 function Todo({
@@ -10,13 +10,23 @@ function Todo({
   allSelected,
   filteredTodo,
 }) {
-  // Define um estado local 'allSelectedState' e a função 'setAllSelectedState' para controlar se todas as tarefas estão selecionadas
+  // Estado local para verificar se todos os elementos estão selecionados
   const [allSelectedState, setAllSelectedState] = useState(allSelected);
   const [editingId, setEditingId] = useState(null); // ID da tarefa em modo de edição
   const [editedName, setEditedName] = useState(""); // Nome editado
 
+  // Efeito que é acionado sempre que 'filteredTodo' for alterado
+  useEffect(() => {
+    // Verifica se todos os elementos em 'filteredTodo' estão selecionados
+    const allElementsSelected = filteredTodo.every((todo) => todo.selected);
+    // Atualiza o estado 'allSelectedState' com base na verificação
+    setAllSelectedState(allElementsSelected);
+  }, [filteredTodo]);
+
   // Função local 'handleSelectAllLocal' chamada ao selecionar ou deselecionar todas as tarefas
   const handleSelectAllLocal = () => {
+    // Atualiza o estado 'allSelectedState' antes de atualizar 'allTodo'
+    setAllSelectedState((prev) => !prev);
     // Cria um novo array 'newTodo' baseado nas tarefas existentes, atualizando a propriedade 'selected' de cada uma
     const newTodo = allTodo.map((todo) => ({
       ...todo,
@@ -24,8 +34,6 @@ function Todo({
     }));
     // Atualiza o estado 'allTodo' com o novo array
     setTodo(newTodo);
-    // Inverte o estado de 'allSelectedState' para refletir a seleção/deseleção geral
-    setAllSelectedState(!allSelectedState);
     // Chama a função passada como propriedade para tratar a seleção/deseleção geral
     handleSelectAll();
   };
@@ -77,11 +85,11 @@ function Todo({
   };
 
   // Retorna a estrutura JSX do componente Todo
+
+  // Retorna a estrutura JSX do componente Todo
   return (
     <div>
-      {/* Checkbox para selecionar ou deselecionar todas as tarefas */}
-      {/* Rótulo associado ao checkbox de seleção/deseleção geral */}
-      {/* Condicional para renderizar o botão Select All apenas se filteredTodo não estiver vazio */}
+      {/* Lista de tarefas */}
       {filteredTodo.length > 0 ? (
         <div className="form-group">
           <div className="stack-small">
@@ -101,8 +109,6 @@ function Todo({
           This filter doesn't have any results.
         </h6>
       )}
-
-      {/* Lista de tarefas */}
       <ul
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
@@ -110,16 +116,19 @@ function Todo({
         {/* Mapeia cada tarefa e renderiza um item de lista com checkbox associado */}
         {filteredTodo.map((todo) => (
           <li className="todo" key={todo.id}>
-            {/*Checkbox para selecionar ou deselecionar uma tarefa
-                  específica */}
-            <input
-              type="checkbox"
-              className="todo-text"
-              checked={todo.selected || false}
-              onChange={() => handleSelectTodoLocal(todo.id)}
-            />
-            {/*Se não estiver em modo de edição, exibe o nome da tarefa */}
-            <label className="todo-label">{todo.name}</label>
+            {/* Checkbox para selecionar ou deselecionar uma tarefa específica */}
+            {editingId !== todo.id && (
+              <div className="c-cb">
+                <input
+                  type="checkbox"
+                  className="todo-text"
+                  checked={todo.selected || false}
+                  onChange={() => handleSelectTodoLocal(todo.id)}
+                />
+                {/* Se não estiver em modo de edição, exibe o nome da tarefa */}
+                <label className="todo-label">{todo.name}</label>
+              </div>
+            )}
             {/* Se estiver em modo de edição, exibe o input para editar o nome */}
             {editingId === todo.id ? (
               <div>
@@ -151,7 +160,6 @@ function Todo({
             {/* Botões "Edit" e "Delete" */}
             {editingId !== todo.id ? (
               <div className="btn-group">
-                {" "}
                 <button
                   type="button"
                   className="btn toggle-btn"

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { TODOFUNCTIONS } from './constants'
 
 // Em um projeto React, index.js é o ponto de entrada para a aplicação.
 // Ele é responsável por carregar a aplicação e encontrar um elemento DOM para renderizá-la.
@@ -14,7 +13,8 @@ import { TODOFUNCTIONS } from './constants'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App tasks={TODOFUNCTIONS} />
+    {/*<App tasks={TODOFUNCTIONS} />*/}
+    <App />
   </React.StrictMode>
 );
 
