@@ -1,5 +1,6 @@
 // Importa o React e a função 'useState' do pacote 'react'
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 // Define o componente funcional 'Todo', que recebe várias propriedades desestruturadas como argumentos
 function Todo({
@@ -82,9 +83,13 @@ function Todo({
     // Remove a tarefa da lista ao clicar em "Delete"
     const newTodo = allTodo.filter((todo) => todo.id !== id);
     setTodo(newTodo);
+  
+    // Remove o item do cookie
+    const todoDataArray = JSON.parse(Cookies.get("todoData") || "[]");
+    const updatedTodoData = todoDataArray.filter((todo) => todo.id !== id);
+    Cookies.remove("todoData", { path: "/" });
+    Cookies.set("todoData", JSON.stringify(updatedTodoData), { path: "/" });
   };
-
-  // Retorna a estrutura JSX do componente Todo
 
   // Retorna a estrutura JSX do componente Todo
   return (
@@ -160,6 +165,7 @@ function Todo({
             {/* Botões "Edit" e "Delete" */}
             {editingId !== todo.id ? (
               <div className="btn-group">
+                {" "}
                 <button
                   type="button"
                   className="btn toggle-btn"
