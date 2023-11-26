@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function AppIndex() {
 
@@ -10,9 +10,9 @@ function AppIndex() {
                 <Link to="/ex1">EX1 - First Todo: "todo, filter, search and form"</Link>
           </li>
           <br/>
-          {/* <li>
+          <li>
                 <Link to="/ex2">EX2 - Second Todo: "style components - only app.js"</Link>
-          </li> */}
+          </li>
         </ul>
         </div>
     );
