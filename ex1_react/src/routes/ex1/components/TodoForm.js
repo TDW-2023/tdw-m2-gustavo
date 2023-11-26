@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // Definição do componente funcional TodoForm que recebe a propriedade 'addNewTodo'
-function TodoForm({ addNewTodo }) {
+function TodoForm({ addNewTodo, setFilter }) {
     // Define um estado 'todoNewItem' para controlar o valor do input
     const [todoNewItem, setNewItem] = useState("");
 
@@ -15,6 +15,8 @@ function TodoForm({ addNewTodo }) {
       addNewTodo(todoNewItem);
       // Limpa o valor do input após a adição da nova tarefa
       setNewItem("");
+
+      setFilter('AllTasks');
     };
 
   // Retorna o JSX que compõe o formulário

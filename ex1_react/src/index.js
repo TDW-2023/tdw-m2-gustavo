@@ -8,15 +8,20 @@ import reportWebVitals from './reportWebVitals';
 // Ele é responsável por carregar a aplicação e encontrar um elemento DOM para renderizá-la.
 // Já App.js é o componente principal da aplicação.
 // Ele contém a lógica principal da aplicação e é o componente raiz da hierarquia de componentes.
-// Em geral, é uma boa prática manter a lógica principal da aplicação em App.js e usar index.js apenas para renderizar o componente App.
+// Em geral, é uma boa prática manter a lógica principal da aplicação em App.js
+// e usar index.js apenas para renderizar o componente App.
 
+// Criando a raiz uma vez e renderizando o componente App
+// ReactDOM.createRoot: Cria a raiz para renderização de componentes React no contêiner especificado.
+// root.render(<App />): Renderiza o componente App dentro da raiz.
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    {/*<App tasks={TODOFUNCTIONS} />*/}
-    <App />
-  </React.StrictMode>
-);
+// root.render(
+//   <React.StrictMode>
+//     {/*<App tasks={TODOFUNCTIONS} />*/}
+//     <App />
+//   </React.StrictMode>
+// );
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
