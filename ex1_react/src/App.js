@@ -2,6 +2,7 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App1 from './routes/ex1/App1';
 import App2 from './routes/ex2/App2';
+import App3 from './routes/ex3/App3';
 import AppIndex from './components/AppIndex';
 
 // Criando um navegador de rotas para a aplicação
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: '/ex2',
     element: <App2 />,
+  },
+  {
+    path: '/ex3',
+    element: <App3 />,
   },
 ]);
 

@@ -11,7 +11,11 @@ function AppIndex() {
           </li>
           <br/>
           <li>
-                <Link to="/ex2">EX2 - Second Todo: "style components - only app.js"</Link>
+                <Link to="/ex2">EX2 - Second Todo: "styled components - only app.js"</Link>
+          </li>
+          <br/>
+          <li>
+                <Link to="/ex3">EX3 - Third Todo: "props types - only app.js"</Link>
           </li>
         </ul>
         </div>
