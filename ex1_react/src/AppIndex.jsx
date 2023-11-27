@@ -17,6 +17,10 @@ function AppIndex() {
           <li>
                 <Link to="/ex3">EX3 - Third Todo: "props types - only app.js"</Link>
           </li>
+          <br/>
+          <li>
+                <Link to="/ex4">EX4 - Forth Todo: "context"</Link>
+          </li>
         </ul>
         </div>
     );
