@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-
+import { useTodoContext } from "../../../context/TodoProvider";
 // Definição do componente funcional TodoForm que recebe a propriedade 'addNewTodo'
-function TodoForm({ addNewTodo, setFilter }) {
+function TodoForm() {
+  const {
+    addNewTodo, setFilter
+  } = useTodoContext();
+
     // Define um estado 'todoNewItem' para controlar o valor do input
     const [todoNewItem, setNewItem] = useState("");
 

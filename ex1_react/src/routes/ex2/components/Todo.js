@@ -1,18 +1,22 @@
-// Importa o React e a função 'useState' do pacote 'react'
-import React, { useState, useEffect } from "react";
+// Importa o React e a função 'useEffect' do pacote 'react'
+import React, { useEffect, useState } from "react";
+import { useTodoContext } from "../../../context/TodoProvider";
 import Cookies from "js-cookie";
 
-// Define o componente funcional 'Todo', que recebe várias propriedades desestruturadas como argumentos
-function Todo({
-  allTodo,
-  setTodo,
-  handleSelectAll,
-  handleSelectTodo,
-  allSelected,
-  filteredTodo,
-}) {
+// Define o componente funcional 'Todo'
+function Todo() {
+  // Obtém os estados e funções do contexto
+  const {
+    allTodo,
+    setTodo,
+    handleSelectAll,
+    handleSelectTodo,
+    filteredTodo,
+    errorRepeatedText,
+  } = useTodoContext();
+
   // Estado local para verificar se todos os elementos estão selecionados
-  const [allSelectedState, setAllSelectedState] = useState(allSelected);
+  const [allSelectedState, setAllSelectedState] = useState(false);
   const [editingId, setEditingId] = useState(null); // ID da tarefa em modo de edição
   const [editedName, setEditedName] = useState(""); // Nome editado
 
@@ -83,7 +87,7 @@ function Todo({
     // Remove a tarefa da lista ao clicar em "Delete"
     const newTodo = allTodo.filter((todo) => todo.id !== id);
     setTodo(newTodo);
-  
+
     // Remove o item do cookie
     const todoDataArray = JSON.parse(Cookies.get("todoData") || "[]");
     const updatedTodoData = todoDataArray.filter((todo) => todo.id !== id);
@@ -185,6 +189,7 @@ function Todo({
           </li>
         ))}
       </ul>
+      {errorRepeatedText !== "" ? <div>{errorRepeatedText}</div> : null}
     </div>
   );
 }

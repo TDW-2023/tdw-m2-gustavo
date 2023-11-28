@@ -39,12 +39,8 @@
 // export default TodoSearch;
 
 import React, { useState } from "react";
-import { useTodoContext } from "../../../context/TodoProvider";
-// Define o componente funcional 'TodoSearch', que recebe props para acessar as propriedades 'searchTerm' e 'setSearchTerm'
-function TodoSearch() {
-  const {
-    setSearchTerm
-  } = useTodoContext();
+// Define o componente funcional 'TodoSearch', que recebe as propriedades 'searchTerm' e 'setSearchTerm'
+function TodoSearch({ searchTerm, setSearchTerm }) {
   // Função chamada quando o valor do input é alterado
   const handleInputChange = (event) => {
     // Atualiza o estado 'searchTerm' com o valor do input
@@ -66,9 +62,7 @@ function TodoSearch() {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <button type="submit" className="btn toggle-btn">
-        Search
-      </button>
+      <button type="submit" className="btn toggle-btn">Search</button>
     </form>
   );
 }

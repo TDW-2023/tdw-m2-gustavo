@@ -1,11 +1,7 @@
 import React from "react";
-import { useTodoContext } from "../../../context/TodoProvider";
-// Define o componente funcional 'TodoListFilter' que recebe propriedades desestruturadas
-function TodoListFilter() {
-  const {
-    setFilter
-  } = useTodoContext();
 
+// Define o componente funcional 'TodoListFilter' que recebe propriedades desestruturadas
+function TodoListFilter({ setFilter }) {
   return (
     <div className="filters btn-group stack-exception">
       {/* Botão para definir o filtro como 'AllTasks' quando clicado */}
